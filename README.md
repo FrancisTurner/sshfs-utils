@@ -4,7 +4,7 @@ A couple of utility scripts for creating SSHFS mounts etc.
 ## Installation
 
 ```
-git clone FrancisTurner/sshfs-utils.git
+git clone https://github.com/FrancisTurner/sshfs-utils.git
 sudo sshfs/setupsshfs.sh
 ```
 
@@ -25,7 +25,9 @@ Then
 2f mp [ mp2 ...]
 ```
 Mount existing defined (from mk2f) mountpoint mp (and mp2 etc. if specified) in /mnt/ssh
-e.g. 2f local or 2f remote remwww
+e.g. ```2f local``` or ```2f remote remwww```
+
+Then ```ls /mnt/ssh/local``` shows the contents of pi@192.168.1.123:/home/pi etc.
 
 ```
 2f -u [ mountpoint]
@@ -53,7 +55,7 @@ Delete mount point(s) specified in /mnt/ssh/ and the associted config informatio
 ```
 ssh to the server defined in ~/.config/sshfs/mountpoint
 
-e.g (using the examples in mk2f above) 2ssh local will do ssh pi@192.168.1.123 and both 2ssh remote and 2ssh remwww
+e.g (using the examples above) ```2ssh local``` will do ssh pi@192.168.1.123 and both ```2ssh remote``` and ```2ssh remwww```
 will do ssh pi@remotepi.example.com
 
 ```

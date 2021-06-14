@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# 2ssh - sshfs-utils
+#
+# Copyright (c) 2021, Francis Turner
+# All rights reserved.
+#
+# 2ssh PARM
+# SSH to the system as defined in ~/.config/sshfs/PARM .
+# 2ssh -l lists all defined sshfs mount points
+# 
+# if no parameter give help
+#
+if [ ${#*} -eq 0 ]
+then
+	echo "Usage: $0 mountpoint"
+	echo "       $0 -l"
+	exit 1
+fi
+if [ $1 = '-l' ]
+then
+	for FN in ~/.config/sshfs/*; do
+		echo "$FN : "`cat $FN`
+	done
+	exit 0
+fi
+if [ ! -f ~/.config/sshfs/$1 ]
+then
+	echo "Mountpoint $1 has no ssh map info"
+	exit 1
+fi
+ssh `sed 's/:.*$//' ~/.config/sshfs/$1` 

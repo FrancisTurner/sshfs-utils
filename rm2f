@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# rm2f - sshfs-utils
+#
+# Copyright (c) 2021, Francis Turner
+# All rights reserved.
+#
+# delete the sshfs mountpoint /mnt/ssh/PARM and the associated config
+# files (~/.config/sshfs/PARM ).
+# Note can specify multiple mounts at once: rm2f M1 M2 ...
+#
+# If no parameter give help
+#
+if [ ${#*} -lt 1 ]
+then
+	echo "Usage: $0 mountpoint [mountpoint2 ...]"
+	exit 1
+fi
+while [ ${#*} -ge 1 ]
+do
+	if [ -d /mnt/ssh/$1 ]
+	then
+		echo "Deleting mountpoint (/mnt/ssh/)$1"
+		rmdir "/mnt/ssh/$1"
+	else
+		echo "Mountpoint $1 not found"
+	fi
+	if [ -f ~/.config/sshfs/$1 ]
+	then
+		echo "Deleting map info ~/.config/sshfs/$1"
+		rm ~/.config/sshfs/$1
+	else
+		echo "Mountpoint $1 has no ssh map info"
+	fi
+	shift
+done
+

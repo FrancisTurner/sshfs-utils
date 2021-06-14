@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# 2f - sshfs-utils
+#
+# Copyright (c) 2021, Francis Turner
+# All rights reserved.
+#
+# 2f PARM
+# mount the sshfs mountpoint defined in ~/.config/sshfs/PARM to /mnt/ssh/PARM.
+# Note can specify multiple mounts at once: 2f M1 M2 ...
+# if no parameter give help
+# 2f -l lists all active sshfs mount points 
+# 2f -u unmounts all active sshfs mount points
+# 2f -U unmounts all active sshfs mount points with more vigor (use when -u fails)
+# 2f -u PARM unmounts just the specified mountpoint (-U PARM similarly)
+#
+if [ ${#*} -eq 0 ]
+then
+	echo "Usage: $0 mountpoint"
+	echo "       $0 -l | -u [mountpount] | -U [mountpount]"
+	exit 1
+fi
+if [ $1 = '-l' ]
+then
+	grep sshfs /etc/mtab | sed 's/fuse.sshfs.*//'
+	exit 0
+fi
+if [ $1 = '-u' ]
+then
+	shift
+	if [ ${#*} -eq 0 ]
+	then
+		grep sshfs /etc/mtab | awk '{print "fusermount -u ",$2}' | sh
+	else
+		grep '/mnt/ssh/'$1 /etc/mtab | awk '{print "fusermount -u ",$2}' | sh
+	fi
+	exit 0
+fi
+
+if [ $1 = '-U' ]
+then
+	shift
+	if [ ${#*} -eq 0 ]
+	then
+		grep sshfs /etc/mtab | awk '{print "fusermount -u -z ",$2}' | sh
+	else
+		grep '/mnt/ssh/'$1 /etc/mtab | awk '{print "fusermount -u -z ",$2}' | sh
+	fi
+	exit 0
+fi
+
+while [ ${#*} -ge 1 ]
+do
+	if [ ! -d /mnt/ssh/$1 ]
+	then
+		echo "Mountpoint $1 does not exist"
+		exit 1
+	fi
+	if [ ! -f ~/.config/sshfs/$1 ]
+	then
+		echo "Mountpoint $1 has no ssh map info"
+		exit 1
+	fi
+	sshfs -o idmap=user `cat ~/.config/sshfs/$1` /mnt/ssh/$1
+done

@@ -13,7 +13,7 @@ sudo sshfs/setupsshfs.sh
 mk2f mountpoint sshpath
 ```
 Create new mount point in /mnt/ssh/mountpoint and the config information in ~/.config/sshfs/mountpoint then mount it to make sure it works.
-Strongly recommend that you have sshed to it first to confirm that things exist as you think they do
+Strongly recommend that you have sshed to it first to confirm that things exist as you think they do. Also ssh-copy-id is probably a good idea
 
 e.g. 
 ```

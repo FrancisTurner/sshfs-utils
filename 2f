@@ -62,4 +62,5 @@ do
 		exit 1
 	fi
 	sshfs -o idmap=user `cat ~/.config/sshfs/$1` /mnt/ssh/$1
+	shift	
 done

@@ -60,6 +60,15 @@ e.g (using the examples above) ```2ssh local``` will do ssh pi@192.168.1.123 and
 will do ssh pi@remotepi.example.com
 
 ```
+2ssh [username]@XX
+2ssh [username]@XX.YY
+```
+ssh to the server XX on same subnet  
+
+e.g if on subnet 192.168.1.0, ```ssh pi@55``` will do ```ssh pi@192.168.1.55``` and ```ssh @0.53``` will do ```ssh $USER@192.168.0.53```
+
+
+```
 2ssh -l
 ```
 list all defined mountpoints whether active or not

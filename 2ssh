@@ -8,13 +8,17 @@
 # 2ssh PARM
 # SSH to the system as defined in ~/.config/sshfs/PARM .
 # 2ssh -l lists all defined sshfs mount points
-# 
+# 2ssh [username]@123 SSH to host 123 on the local subnet (as username)
+# e.g. if on subnet 192.168.1.0, ssh pi@55 does 'ssh pi@192.168.1.55'
+# and ssh @0.53 does 'ssh $USER@192.168.0.53'
+#
 # if no parameter give help
 #
 if [ ${#*} -eq 0 ]
 then
 	echo "Usage: $0 mountpoint"
 	echo "       $0 -l"
+	echo "       $0 [username]@123[.45]"
 	exit 1
 fi
 if [ $1 = '-l' ]
@@ -22,6 +26,23 @@ then
 	for FN in ~/.config/sshfs/*; do
 		echo "$FN : "`cat $FN`
 	done
+	exit 0
+fi
+if [[ $1 == *"@"* ]]
+then
+	IFS='@' read NAME HOSTIP <<<"$1"
+	if [[ $1 == *"."* ]]
+	then
+		FH=`hostname -I | sed 's/\([1-9][0-9.]*\.\)[1-9][0-9.]*\..*/\1'$HOSTIP'/'`
+	else
+		FH=`hostname -I | sed 's/\([1-9][0-9.]*\.\).*/\1'$HOSTIP'/'`
+	fi
+	if [ -z "$NAME" ]
+	then
+		NAME=$USER
+	fi
+	echo "SSHing $NAME@$FH"
+	ssh $NAME'@'$FH
 	exit 0
 fi
 if [ ! -f ~/.config/sshfs/$1 ]

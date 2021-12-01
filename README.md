@@ -8,6 +8,11 @@ git clone https://github.com/FrancisTurner/sshfs-utils.git
 sudo sshfs/setupsshfs.sh
 ```
 
+### Updates
+If there are updates do a ```git pull``` 
+and either rerun setupsshfs.sh
+or just ```sudo cp *2f 2ssh /usr/local/bin```
+
 ## Usage
 ```
 mk2f mountpoint [options] sshpath

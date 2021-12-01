@@ -36,17 +36,27 @@ then
 		echo "Quitting" 1>&2
 		exit 2
 	fi
+else
+	echo "Creating sshfs root mountpoint /mnt/ssh/"
+	mkdir /mnt/ssh
+	chmod a+wx /mnt/ssh
 fi
-echo "Creating sshfs root mountpoint /mnt/ssh/"
-mkdir /mnt/ssh
-chmod a+wx /mnt/ssh
-echo "Creating sshfs temp mountpoint /mnt/ssh/tmp"
-mkdir /mnt/ssh/tmp
-chown $MYUID:$MYUID /mnt/ssh/tmp
+if [ -d /mnt/ssh/tmp ]
+then
+	echo "Sshfs temp mountpoint /mnt/ssh/tmp already exists"
+else 
+	echo "Creating sshfs temp mountpoint /mnt/ssh/tmp"
+	mkdir /mnt/ssh/tmp
+	chown $MYUID:$MYUID /mnt/ssh/tmp
+fi
 
-echo "Creating config dir: ${HOMEDIR}/.config/sshfs"
-
-sudo -u \#$MYUID mkdir ${HOMEDIR}/.config/sshfs
+if [ -d ${HOMEDIR}/.config/sshfs ]
+then
+	echo "Sshfs config directory ${HOMEDIR}/.config/sshfs already exists"
+else 
+	echo "Creating config dir: ${HOMEDIR}/.config/sshfs"
+	sudo -u \#$MYUID mkdir ${HOMEDIR}/.config/sshfs
+fi
 
 if ! command -v sshfs &> /dev/null
 then

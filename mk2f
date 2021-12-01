@@ -11,14 +11,15 @@
 #
 # If no parameter give help
 #
-if [ ${#*} -ne 2 ]
+
+if [ ${#*} -lt 2 ]
 then
 	echo "Usage: $0 mountpoint 'user@host:/path'"
 	exit 1
 fi
 if [ -d /mnt/ssh/$1 ]
 then
-	echo "Mpuntpoint $1 already exists"
+	echo "Mountpoint $1 already exists"
 	exit 1
 fi
 if [ -f ~/.config/sshfs/$1 ]
@@ -27,8 +28,19 @@ then
 	exit 1
 fi
 
-echo "Creating mountpoint (/mnt/ssh/)$1 mapping to $2"
+echo "Check connecticity by ssh and ls of '${@:2}' ? (y/N)"
+read  ANSWER
+if [ "$ANSWER" != "${ANSWER#[Yy]}" ] ;then
+	echo ${@:2} | sed 's/^\([^:]*\):/ssh \1 ls /' | sh
+	read -p "Did that work? (y/N)" ANSWER
+	if [ "$ANSWER" == "${ANSWER#[Yy]}" ] ;then
+		echo "Quitting" 1>&2
+		exit 2
+	fi
+fi
+
+echo "Creating mountpoint (/mnt/ssh/$1 ) mapping to ${@:2}"
 mkdir "/mnt/ssh/$1"
-echo $2 > ~/.config/sshfs/$1
+echo ${@:2} > ~/.config/sshfs/$1
 echo "testing..."
 2f $1

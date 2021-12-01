@@ -37,9 +37,12 @@ then
 		exit 2
 	fi
 fi
-echo "Creating sshfs mountpoint"
+echo "Creating sshfs root mountpoint /mnt/ssh/"
 mkdir /mnt/ssh
 chmod a+wx /mnt/ssh
+echo "Creating sshfs temp mountpoint /mnt/ssh/tmp"
+mkdir /mnt/ssh/tmp
+chown $MYUID:$MYUID /mnt/ssh/tmp
 
 echo "Creating config dir: ${HOMEDIR}/.config/sshfs"
 
@@ -54,4 +57,4 @@ echo "Copying files from $SRC to /usr/local/bin"
 cd $SRC
 cp *2f 2ssh /usr/local/bin
 
-echo "Installaction complete. Do mk2f to create a mount point"
+echo "Installation complete. Do mk2f to create a mount point"

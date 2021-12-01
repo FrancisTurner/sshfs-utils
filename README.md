@@ -10,7 +10,7 @@ sudo sshfs/setupsshfs.sh
 
 ## Usage
 ```
-mk2f mountpoint sshpath
+mk2f mountpoint [options] sshpath
 ```
 Create new mount point in /mnt/ssh/mountpoint and the config information in ~/.config/sshfs/mountpoint then mount it to make sure it works.
 Strongly recommend that you have sshed to it first to confirm that things exist as you think they do. Also ssh-copy-id is probably a good idea
@@ -20,6 +20,7 @@ e.g.
 mk2f local pi@192.168.1.123:/home/pi
 mk2f remote pi@remotepi.example.com:/home/pi
 mk2f remwww pi@remotepi.example.com:/var/wwww
+mk2f pi2222 -p 2222 pi@pi2222.example.com:/var/wwww
 ```
 Then
 ```
@@ -47,6 +48,14 @@ connection error and sshfs is not happy
 lists all active sshfs mount points 
 
 ```
+2f tmp [user@]host:/path/ 
+```
+mounts host:/path/ to the /mnt/ssh/tmp mount point. If you have already got something mounted on /tmp it will give an error. 
+In that case you'll want to ```2f -u tmp``` and retry
+
+Similar to 2ssh (below) @XX and @XX.YY will be expanded appropriately
+
+```
 rm2f mountpoint [mp2...]
 ```
 Delete mount point(s) specified in /mnt/ssh/ and the associted config information in ~/.config/sshfs/
@@ -63,7 +72,7 @@ will do ssh pi@remotepi.example.com
 2ssh [username]@XX
 2ssh [username]@XX.YY
 ```
-ssh to the server XX on same subnet  
+ssh to the server XX on same subnet or server XX.YY on adjacent subnet
 
 e.g if on subnet 192.168.1.0, ```ssh pi@55``` will do ```ssh pi@192.168.1.55``` and ```ssh @0.53``` will do ```ssh $USER@192.168.0.53```
 

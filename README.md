@@ -55,10 +55,11 @@ lists all active sshfs mount points
 ```
 2f tmp [user@]host:/path/ 
 ```
-mounts host:/path/ to the /mnt/ssh/tmp mount point. If you have already got something mounted on /tmp it will give an error. 
+mounts host:/path/ to the /mnt/ssh/tmp mount point. If you have already got something mounted on /mnt/ssh/tmp it will give an error. 
 In that case you'll want to ```2f -u tmp``` and retry
 
-Similar to 2ssh (below) @XX and @XX.YY will be expanded appropriately
+Similar to 2ssh (below) @XX and @XX.YY will be expanded appropriately so
+```2f tmp server@1.114:/home/server/``` mounts server@192.168.1.114:/home/server/ on /mnt/ssh/tmp
 
 ```
 rm2f mountpoint [mp2...]

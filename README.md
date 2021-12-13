@@ -18,8 +18,8 @@ or just ```sudo cp *2f 2ssh /usr/local/bin```
 mk2f mountpoint [options] sshpath
 ```
 Create new mount point in /mnt/ssh/mountpoint and the config information in ~/.config/sshfs/mountpoint then mount it to make sure it works.
-Strongly recommend that you have sshed to it first to confirm that things exist as you think they do, though it offers you the option to do so. 
-Also ssh-copy-id is probably a good idea. 2ssh (and 2ssh -c) is your friend here
+Strongly recommend that you have sshed to it first to confirm that things exist as you think they do, though mk2f offers you the option to do something similar as part of the create process. 
+Also ssh-copy-id is probably a good idea. 2ssh (specifically 2ssh -c) is your friend here
 
 e.g. 
 ```

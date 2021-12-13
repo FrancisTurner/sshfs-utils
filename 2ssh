@@ -9,16 +9,18 @@
 # SSH to the system as defined in ~/.config/sshfs/PARM .
 # 2ssh -l lists all defined sshfs mount points
 # 2ssh [username]@123 SSH to host 123 on the local subnet (as username)
-# e.g. if on subnet 192.168.1.0, ssh pi@55 does 'ssh pi@192.168.1.55'
-# and ssh @0.53 does 'ssh $USER@192.168.0.53'
+# e.g. if on subnet 192.168.1.0, 2ssh pi@55 does 'ssh pi@192.168.1.55'
+# and 2ssh @0.53 does 'ssh $USER@192.168.0.53'
+#
+# 2ssh -c location does ssh-copy-id instead of ssh
 #
 # if no parameter give help
 #
 if [ ${#*} -eq 0 ]
 then
-	echo "Usage: $0 mountpoint"
+	echo "Usage: $0 [-c] mountpoint"
 	echo "       $0 -l"
-	echo "       $0 [username]@123[.45]"
+	echo "       $0 [-c] [username]@123[.45]"
 	exit 1
 fi
 if [ $1 = '-l' ]
@@ -27,6 +29,18 @@ then
 		echo "$FN : "`cat $FN`
 	done
 	exit 0
+fi
+SSHCOMMAND='ssh'
+if [ $1 = '-c' ]
+then
+	SSHCOMMAND='ssh-copy-id'
+	shift
+	if [ ${#*} -eq 0 ]
+	then
+		echo "Need a mountpoint: $0 -c mountpoint"
+		echo "       $0 -c [username]@123[.45]"
+		exit 1
+	fi
 fi
 if [[ $1 == *"@"* ]]
 then
@@ -42,7 +56,7 @@ then
 		NAME=$USER
 	fi
 	echo "SSHing $NAME@$FH"
-	ssh $NAME'@'$FH
+	$SSHCOMMAND $NAME'@'$FH
 	exit 0
 fi
 if [ ! -f ~/.config/sshfs/$1 ]
@@ -50,4 +64,4 @@ then
 	echo "Mountpoint $1 has no ssh map info"
 	exit 1
 fi
-ssh `sed 's/:.*$//' ~/.config/sshfs/$1` 
+$SSHCOMMAND `sed 's/:.*$//' ~/.config/sshfs/$1` 

@@ -28,10 +28,25 @@ then
 	exit 1
 fi
 
-echo "Check connecticity by ssh and ls of '${@:2}' ? (y/N)"
+if [[ $2 =~ \@([0-9]+(\.[0-9]+)?): ]]
+then
+	HOSTIP=${BASH_REMATCH[1]}
+	#echo $HOSTIP
+	if [[ $HOSTIP == *"."* ]]
+	then
+		FH=`hostname -I | sed 's/\([1-9][0-9.]*\.\)[1-9][0-9.]*\..*/\1'$HOSTIP'/'`
+	else
+		FH=`hostname -I | sed 's/\([1-9][0-9.]*\.\).*/\1'$HOSTIP'/'`
+	fi
+	MP=`echo $2|sed 's/'$HOSTIP'/'$FH'/'`
+	#echo "mounting $MP"
+else
+	MP=${@:2}
+fi
+echo "Check connecticity by ssh and ls of $MP ? (y/N)"
 read  ANSWER
 if [ "$ANSWER" != "${ANSWER#[Yy]}" ] ;then
-	echo ${@:2} | sed 's/^\([^:]*\):/ssh \1 ls /' | sh
+	echo $MP | sed 's/^\([^:]*\):/ssh \1 ls /' | sh
 	read -p "Did that work? (y/N)" ANSWER
 	if [ "$ANSWER" == "${ANSWER#[Yy]}" ] ;then
 		echo "Quitting" 1>&2
@@ -39,8 +54,8 @@ if [ "$ANSWER" != "${ANSWER#[Yy]}" ] ;then
 	fi
 fi
 
-echo "Creating mountpoint (/mnt/ssh/$1 ) mapping to ${@:2}"
+echo "Creating mountpoint (/mnt/ssh/$1 ) mapping to $MP"
 mkdir "/mnt/ssh/$1"
-echo ${@:2} > ~/.config/sshfs/$1
+echo $MP > ~/.config/sshfs/$1
 echo "testing..."
 2f $1

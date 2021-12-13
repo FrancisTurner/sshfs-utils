@@ -5,7 +5,7 @@ A couple of utility scripts for creating SSHFS mounts etc.
 
 ```
 git clone https://github.com/FrancisTurner/sshfs-utils.git
-sudo sshfs/setupsshfs.sh
+sudo sshfs-utils/setupsshfs.sh
 ```
 
 ### Updates
@@ -18,7 +18,8 @@ or just ```sudo cp *2f 2ssh /usr/local/bin```
 mk2f mountpoint [options] sshpath
 ```
 Create new mount point in /mnt/ssh/mountpoint and the config information in ~/.config/sshfs/mountpoint then mount it to make sure it works.
-Strongly recommend that you have sshed to it first to confirm that things exist as you think they do. Also ssh-copy-id is probably a good idea
+Strongly recommend that you have sshed to it first to confirm that things exist as you think they do, though it offers you the option to do so. 
+Also ssh-copy-id is probably a good idea. 2ssh (and 2ssh -c) is your friend here
 
 e.g. 
 ```
@@ -26,8 +27,17 @@ mk2f local pi@192.168.1.123:/home/pi
 mk2f remote pi@remotepi.example.com:/home/pi
 mk2f remwww pi@remotepi.example.com:/var/wwww
 mk2f pi2222 -p 2222 pi@pi2222.example.com:/var/wwww
+mk2f nearby pi@123:/home/pi
 ```
-Then
+Options like the ssh port can be passed - see the -p 2222 in the example above.
+
+Similar to 2ssh (below) @XX and @XX.YY will be expanded appropriately so
+```mk2f n114 server@1.114:/home/server/``` creates the mountpoint 
+server@192.168.1.114:/home/server/ on /mnt/ssh/n114
+
+mk2f also mounts the mountpoint initially. After a reboot (or a 2f -u) you can 
+remount the predefined mountpoint using 2f commands
+ 
 ```
 2f mp [ mp2 ...]
 ```
@@ -87,3 +97,8 @@ e.g if on subnet 192.168.1.0, ```ssh pi@55``` will do ```ssh pi@192.168.1.55``` 
 2ssh -l
 ```
 list all defined mountpoints whether active or not
+
+```
+2ssh -c mountpoint|[username]@XX
+```
+do ssh-copy-id to the destination instead of ssh

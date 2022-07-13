@@ -55,7 +55,7 @@ then
 	echo "Sshfs config directory ${HOMEDIR}/.config/sshfs already exists"
 else 
 	echo "Creating config dir: ${HOMEDIR}/.config/sshfs"
-	sudo -u \#$MYUID mkdir ${HOMEDIR}/.config/sshfs
+	sudo -u \#$MYUID mkdir -p ${HOMEDIR}/.config/sshfs
 fi
 
 if ! command -v sshfs &> /dev/null
